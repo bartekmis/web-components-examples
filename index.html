@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Web Components - first time</title>
+    <style>
+    p {
+        color: blue;
+    }
+    </style>
+</head>
+<body>
+    <h1>Web Components - examples</h1>
+    <h2>1. Understanding Shadow DOM looking at &lt;video&gt; example</h2>
+    <p>Detect the element using Dev Tools.</p>
+    <video src="http://craftymind.com/factory/html5video/BigBuckBunny_640x360.mp4" controls></video>
+
+    <h2>2. Understanding structure of Shadow DOM</h2>
+    <figure>
+        <img src="http://webcomponents.org/img/stories/shadowdom-architecture.png" alt="">
+        <figcaption>Image from <a href="http://webcomponents.org/articles/introduction-to-shadow-dom/" target="_blank">webcomponents.org</a></figcaption>
+    </figure>
+
+    <h2>3. My first Shadow DOM build</h2>
+    <div id="host"></div>
+
+    <script>
+        var host = document.querySelector('#host');
+        var root = host.createShadowRoot();
+        var p = document.createElement('p');
+        p.textContent = 'This is some text inside the paragraph (investigate this element with Dev Tools)';
+        root.appendChild(p);
+    </script>
+
+    <h2>Using &lt;template&gt; in Shadow DOM</h2>
+    <template id="myTemplate">
+        <style>
+        p {
+            color: red;
+        }
+        </style>
+
+        <content select="h3"></content>
+        <p>Text here!</p>
+    </template>
+
+    <div id="host2">
+        <h3>Hello!</h3>
+    </div>
+
+    <script>
+        var host = document.querySelector('#host2');
+        var root = host.createShadowRoot();
+        var template = document.querySelector('#myTemplate');
+        var clone = document.importNode(template.content, true);
+        root.appendChild(clone);
+    </script>
+
+    <h2>Custom Elements</h2>
+    <template id="tplCustomElement">
+        <style>
+        p {
+            color: red;
+        }
+        </style>
+
+        <p>Custom text here!</p>
+    </template>
+
+    <script>
+        var template = document.querySelector('#tplCustomElement');
+        var customElementProto = Object.create(HTMLElement.prototype);
+
+        customElementProto.createdCallback = function() {
+            var root = this.createShadowRoot();
+            root.appendChild(document.importNode(template.content, true));
+        };
+
+        var customElement = document.registerElement('custom-element', {
+            prototype: customElementProto
+        });
+    </script>
+    <custom-element></custom-element>
+    <custom-element></custom-element>
+    <custom-element></custom-element>
+</body>
+</html>
