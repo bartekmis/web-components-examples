@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Web Components - timestamp component</title>
+</head>
+<body>
+    <script>
+    var timeStampPrototype = Object.create(HTMLElement.prototype);
+
+    var calculateWords = function(timestamp) {
+        var timeDiff = ((Date.now()/1000)-timestamp)/60;
+        return timeDiff.toFixed(0);
+    };
+
+    timeStampPrototype.createdCallback = function() {
+        var root = this.createShadowRoot();
+        var time = document.createElement('span');
+        time.textContent = calculateWords(this.getAttribute('time'))+' minutes ago';
+
+        root.appendChild(time);
+    };
+
+    var timeStamp = document.registerElement('time-stamp', {
+        prototype: timeStampPrototype
+    });
+    </script>
+
+    <time-stamp time="1437330740"></time-stamp>
+    <time-stamp time="1432330740"></time-stamp>
+    <time-stamp time="1417330740"></time-stamp>
+</body>
+</html>
