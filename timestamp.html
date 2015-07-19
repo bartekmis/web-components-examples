@@ -8,7 +8,7 @@
     <script>
     var timeStampPrototype = Object.create(HTMLElement.prototype);
 
-    var calculateWords = function(timestamp) {
+    var calculateTimeDiff = function(timestamp) {
         var timeDiff = ((Date.now()/1000)-timestamp)/60;
         return timeDiff.toFixed(0);
     };
@@ -16,7 +16,7 @@
     timeStampPrototype.createdCallback = function() {
         var root = this.createShadowRoot();
         var time = document.createElement('span');
-        time.textContent = calculateWords(this.getAttribute('time'))+' minutes ago';
+        time.textContent = calculateTimeDiff(this.getAttribute('time'))+' minutes ago';
 
         root.appendChild(time);
     };
